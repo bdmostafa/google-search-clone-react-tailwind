@@ -6,13 +6,7 @@ import { useResultContext } from "../contexts/ResultContextProvider";
 import { Loading } from "./Loading";
 
 export const Results = () => {
-  const {
-    results: { results, image_results, entries },
-    isLoading,
-    getResults,
-    searchTerm,
-  } = useResultContext();
-  //   const location = useLocation();
+  const { results, isLoading, getResults, searchTerm } = useResultContext();
   const locationPath = useLocation().pathname;
 
   useEffect(() => {
@@ -52,7 +46,7 @@ export const Results = () => {
     case "/images":
       return (
         <div className="flex flex-wrap justify-between items-center">
-          {image_results?.map(({ image, link: { href, title } }, index) => (
+          {results?.map(({ image, link: { href, title } }, index) => (
             <a
               href={href}
               target="_blank"
@@ -69,9 +63,12 @@ export const Results = () => {
 
     case "/news":
       return (
-        <div className="border-opacity-5 rounded-lg border-gray-200 dark:border-gray-700 flex flex-wrap justify-between items-center space-y-12 sm:px-56">
-          {/* {entries?.map(({ id, links, source, title, published }) => (
-            <div key={id} className="md:w-2/5 w-full ">
+        <div className="flex flex-wrap justify-between items-center space-y-12 sm:px-56">
+          {results?.map(({ id, links, source, title, published }) => (
+            <div
+              key={id}
+              className="md:w-2/5 w-full border-opacity-5 rounded-lg border-gray-200 dark:border-gray-700"
+            >
               <a
                 href={links?.[0].href}
                 target="_blank"
@@ -95,23 +92,41 @@ export const Results = () => {
               </div>
               <div className="flex">{new Date(published).toDateString()}</div>
             </div>
-          ))} */}
+          ))}
         </div>
       );
 
     case "/videos":
       return (
         <div className="flex flex-wrap ">
-          {results?.map((video, index) => (
-            <div key={index} className="p-2">
-              <ReactPlayer
-                url={video.additional_links?.[0].href}
-                controls
-                width="355px"
-                height="200px"
-              />
-            </div>
-          ))}
+          {results?.map(
+            ({ link, title, description, cite: { domain } }, index) => (
+              <div key={index} className="p-2">
+                <p className="text-gray-500 dark:text-gray-200">{domain}</p>
+                <a
+                  href={link}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="hover:underline hover:text-blue-300"
+                >
+                  {" "}
+                  <h2 className="font-bold text-2xl">{title}</h2>
+                </a>
+
+                <div className="flex">
+                  <div className="flex-auto">
+                    <ReactPlayer
+                      url={link}
+                      controls
+                      width="200px"
+                      height="125px"
+                    />
+                  </div>
+                  <div className="flex-auto px-6">{description}</div>
+                </div>
+              </div>
+            )
+          )}
         </div>
       );
     default:
