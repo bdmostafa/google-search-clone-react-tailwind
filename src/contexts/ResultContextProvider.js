@@ -28,6 +28,8 @@ export const ResultContextProvider = ({ children }) => {
       setResults(data.images_results);
     } else if (urlWithParams.includes("/news")) {
       setResults(data.entries);
+    } else if (urlWithParams.includes("/scholar")) {
+        setResults(data.html)
     } else {
       setResults(data.results);
     }

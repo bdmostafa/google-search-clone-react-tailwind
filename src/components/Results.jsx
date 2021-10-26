@@ -4,6 +4,7 @@ import ReactPlayer from "react-player";
 
 import { useResultContext } from "../contexts/ResultContextProvider";
 import { Loading } from "./Loading";
+import parse from "html-react-parser";
 
 export const Results = () => {
   const { results, isLoading, getResults, searchTerm } = useResultContext();
@@ -127,6 +128,14 @@ export const Results = () => {
               </div>
             )
           )}
+        </div>
+      );
+
+    case "/scholar":
+      return (
+        <div>
+          {/* <div dangerouslySetInnerHTML={{__html: results}} /> */}
+          {parse(results)}
         </div>
       );
     default:
