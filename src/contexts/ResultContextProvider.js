@@ -12,7 +12,7 @@ export const ResultContextProvider = ({ children }) => {
     // /videos, /search, /images
     const getResults = async (urlWithParams) => {
         setIsLoading(true)
-console.log(baseUrl, urlWithParams)
+
         const response = await fetch(`${baseUrl}${urlWithParams}`, {
             method: 'GET',
             headers: {
