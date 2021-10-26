@@ -2,18 +2,18 @@ import React, { createContext, useContext, useState } from 'react';
 
 const ResultContext = createContext()
 // const baseUrl = 'https://google-search3.p.rapidapi.com/api/v1/search/q=elon+musk&num=100'
-const baseUrl = 'https://google-search3.p.rapidapi.com/api/v1'
+const baseUrl = process.env.REACT_APP_BASE_URL;
 
 export const ResultContextProvider = ({ children }) => {
     const [results, setResults] = useState([])
     const [isLoading, setIsLoading] = useState(false)
-    const [searchTerm, setSearchTerm] = useState('')
+    const [searchTerm, setSearchTerm] = useState('React+Tailwind')
 
     // /videos, /search, /images
-    const getResults = async (type) => {
+    const getResults = async (urlWithParams) => {
         setIsLoading(true)
-
-        const response = await fetch(`${baseUrl}${type}`, {
+console.log(baseUrl, urlWithParams)
+        const response = await fetch(`${baseUrl}${urlWithParams}`, {
             method: 'GET',
             headers: {
                 'x-user-agent': 'desktop',
