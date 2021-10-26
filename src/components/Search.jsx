@@ -3,8 +3,20 @@ import { useDebounce } from "use-debounce";
 
 import { useResultContext } from "../contexts/ResultContextProvider";
 import { Links } from "./Links";
+import useSpeechToText from "react-hook-speech-to-text";
 
 export const Search = () => {
+  const {
+    error,
+    interimResult,
+    isRecording,
+    results,
+    startSpeechToText,
+    stopSpeechToText,
+  } = useSpeechToText({
+    continuous: true,
+    useLegacyResults: false,
+  });
   const { setSearchTerm } = useResultContext();
   const [text, setText] = useState("React plus Tailwind");
   const [debouncedValue] = useDebounce(text, 1000);
@@ -12,7 +24,7 @@ export const Search = () => {
   useEffect(() => {
     if (debouncedValue) setSearchTerm(debouncedValue);
   }, [debouncedValue]);
-
+  if (error) console.log("error");
   return (
     <div className="relative sm:ml-48 md:ml-72 sm:-mt-10 mt-3">
       <input
@@ -31,6 +43,20 @@ export const Search = () => {
           x
         </button>
       )}
+
+      <div>
+        <h1>Recording: {isRecording.toString()}</h1>
+        <button onClick={isRecording ? stopSpeechToText : startSpeechToText}>
+          {isRecording ? "🎙️ Stop Speaking" : "🎙️ Start Speaking"}
+        </button>
+        <ul>
+          {results.map((result) => (
+            <li key={result.timestamp}>{result.transcript}</li>
+          ))}
+          {interimResult && <li>{interimResult}</li>}
+        </ul>
+      </div>
+
       <Links />
     </div>
   );
